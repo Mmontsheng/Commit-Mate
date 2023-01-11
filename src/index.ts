@@ -1,27 +1,21 @@
 #!/usr/bin/env node
-import 'dotenv/config'
-import { execSync } from 'child_process';
+import 'dotenv/config';
 
-import { GptClient } from './gtpClient';
-const GIT_COMMAND = 'git diff --name-only';
+import { GptClient } from './clients/gtpClient';
+import { GitClient } from './clients/gitClient';
 
 const apiKey = process.env.GPT_API_KEY || '';
-if(!apiKey || !apiKey.length) {
+if (!apiKey || !apiKey.length) {
   console.log('no api key, please define api key');
 }
 
 const gtpClient = new GptClient(apiKey);
-let filesChanged = '';
-try {
-  filesChanged = execSync('git diff --name-only').toString();
-  if (!filesChanged) {
-    console.log('No changes to commit.');
-    process.exit(0);
-  }
-} catch {
-  console.log(`Failed to run ${GIT_COMMAND}.\nPossible cause: Not a git branch`);
-  process.exit(1);
-}
-// console.log(diff);
+const gitClient = new GitClient();
 
-gtpClient.getMessages(filesChanged);
+const { error, changes} = gitClient.getDiff();
+if (error) {
+  console.log(error);
+  process.exit(1);
+} else {
+  gtpClient.getMessages(changes ?? '');
+}
