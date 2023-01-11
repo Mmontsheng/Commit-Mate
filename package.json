@@ -8,15 +8,25 @@
     "start": "node ./build/index.js",
     "dev": "nodemon ./src/index.ts"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mmontsheng/Commit-Mate.git"
+  },
+  "author": {
+    "name": "Mmontsheng Maoto",
+    "email": "mmontshengmaoto@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/Mmontsheng/Commit-Mate/issues"
+  },
+  "homepage": "https://github.com/Mmontsheng/Commit-Mate#readme",
+  "license": "MIT",
   "dependencies": {
     "dotenv": "^16.0.3",
-    "nodemon": "^2.0.20",
     "openai": "^3.1.0"
   },
   "devDependencies": {
-    "@types/node": "^18.11.18",
+    "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4"
   }
