@@ -1,28 +1,29 @@
 import { execSync } from 'child_process';
-import { Diffs } from '../type/git';
+import { Diffs, Commit } from '../type/git';
 const GIT_DIFF_COMMAND = 'git diff --name-only';
-const GIT_COMMIT_COMMAND = 'git commit -m'
+const GIT_COMMIT_COMMAND = 'git commit -m';
 
 export class GitClient {
   getDiff(): Diffs {
     try {
       const filesChanged = execSync(GIT_DIFF_COMMAND).toString();
       if (!filesChanged) {
-        return createDiff(null, 'No changes to commit.');
+        return createDiffResponse(null, 'No changes to commit.');
       }
-      return createDiff(filesChanged, null);
+      return createDiffResponse(filesChanged, null);
     } catch {
-      return createDiff(
+      return createDiffResponse(
         null,
         `Failed to run ${GIT_DIFF_COMMAND}.\nPossible cause: Not a git branch`
       );
     }
   }
-  commit(message: string){
+  commit(message: string): Commit {
     try {
-      return execSync(`${GIT_COMMIT_COMMAND} ${message}`).toString();
+      const response = execSync(`${GIT_COMMIT_COMMAND} "${message}"`).toString();
+      return createCommitResponse(response, null);
     } catch {
-      return createDiff(
+      return createCommitResponse(
         null,
         `Failed to run ${GIT_DIFF_COMMAND}.\nPossible cause: Not a git branch`
       );
@@ -30,7 +31,15 @@ export class GitClient {
   }
 }
 
-const createDiff = (changes: string | null, error: string | null): Diffs => ({
+const createDiffResponse = (
+  changes: string | null,
+  error: string | null
+): Diffs => ({
   changes,
   error,
 });
+
+const createCommitResponse = (
+  response: string | null,
+  error: string | null
+): Commit => ({ response, error });

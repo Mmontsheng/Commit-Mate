@@ -1,10 +1,12 @@
 {
   "name": "commit-mate",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "",
-  "bin": "build/index.js",
+  "bin": "dist/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p .",
+    "publish": "npm publish",
     "start": "node ./build/index.js",
     "dev": "nodemon ./src/index.ts"
   },
@@ -23,7 +25,9 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.0.3",
-    "openai": "^3.1.0"
+    "enquirer": "^2.3.6",
+    "openai": "^3.1.0",
+    "ora": "^6.1.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.20",

@@ -20,7 +20,8 @@ export class GptClient{
         frequency_penalty: 0.2,
         presence_penalty: 0,
       });
-      console.log(response.data.choices[0].text.split(/\r?\n/).filter((t: string) => t?.length));
+      return response.data.choices[0].text.split(/\r?\n/).filter((t: string) => t?.length);
+      // console.log();
       
     } catch (error: any) {
       if (error.response) {
@@ -29,7 +30,7 @@ export class GptClient{
       } else {
         console.log(error.message);
       }
-        
+        return [];
     }
   }
 }
