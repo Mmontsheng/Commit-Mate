@@ -6,7 +6,6 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p .",
-    "publish": "npm publish",
     "start": "node ./build/index.js",
     "dev": "nodemon ./src/index.ts"
   },
