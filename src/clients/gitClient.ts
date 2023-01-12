@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import { Diffs, Commit } from '../type/git';
-const GIT_DIFF_COMMAND = 'git diff --name-only';
+const GIT_DIFF_COMMAND = 'git diff --name-only --cached';
 const GIT_COMMIT_COMMAND = 'git commit -m';
 
 export class GitClient {
@@ -8,7 +8,7 @@ export class GitClient {
     try {
       const filesChanged = execSync(GIT_DIFF_COMMAND).toString();
       if (!filesChanged) {
-        return createDiffResponse(null, 'No changes to commit.');
+        return createDiffResponse(null, 'No changes to commit, run "git add ."');
       }
       return createDiffResponse(filesChanged, null);
     } catch {

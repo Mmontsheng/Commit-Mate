@@ -3,12 +3,9 @@ import 'dotenv/config';
 
 import { GptClient } from './clients/gtpClient';
 import { GitClient } from './clients/gitClient';
-// import ora from 'ora';
 import enquirer from 'enquirer';
 const CANCEL = '--Cancel--';
 const exec = async () => {
-  // const spinner = ora();
-  // spinner.start('Getting commit message...hang tight');
   const gtpClient = new GptClient(apiKey);
   const gitClient = new GitClient();
 
@@ -18,26 +15,30 @@ const exec = async () => {
   } else {
     const choices = await gtpClient.getMessages(changes ?? '');
     choices.push(CANCEL);
-    const answer = await enquirer.prompt<{ message: string }>({
-      type: 'select',
-      name: 'message',
-      message: 'Pick a message',
-      choices,
-    });
-    const { message } = answer;
-    if (message === CANCEL) {
-      console.log('Operation cancelled');
-    } else {
-      const { error, response } = gitClient.commit(message);
-      console.log(response || error);
+    try {
+      const answer = await enquirer.prompt<{ message: string }>({
+        type: 'select',
+        name: 'message',
+        message: 'Pick a message',
+        choices,
+      });
+      const { message } = answer;
+      if (message === CANCEL) {
+        console.log('Operation cancelled');
+      } else {
+        const { error, response } = gitClient.commit(message);
+        console.log(response || error);
+      }
+    } catch (error) {
+      console.log(error);
+      
     }
   }
-  // spinner.stop();
 };
 
 const apiKey = process.env.GPT_API_KEY || '';
 if (!apiKey || !apiKey.length) {
-  console.log('no api key, please define api key');
+  console.error('No api key [GPT_API_KEY], please define api key.\nRead https://github.com/Mmontsheng/Commit-Mate#setup-api-keys for more information');
 } else {
   exec();
 }
