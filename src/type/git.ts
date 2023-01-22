@@ -5,6 +5,10 @@ export interface Commit extends Error {
   response: string | null;
 }
 
-export interface Diffs extends Error {
+export interface Diff extends Error {
   changes: string | null;
+}
+
+export interface Branch extends Error{
+  name: string | null
 }

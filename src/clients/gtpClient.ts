@@ -1,18 +1,20 @@
-import { Configuration, OpenAIApi } from "openai";
+import { Configuration, OpenAIApi } from 'openai';
 
-export class GptClient{
-  openai : any;
+export class GptClient {
+  openai: any;
   constructor(apiKey: string) {
-     const configuration = new Configuration({
+    const configuration = new Configuration({
       apiKey,
     });
     this.openai = new OpenAIApi(configuration);
   }
-  async getMessages(filesChanged: string) {
-    const prompt = `generate five git commit messages based on the following files that changed: ${filesChanged}`
+  async getMessages(filesChanged: string, branchName: string) {
+    const prompt = `generate five git commit messages for branch ${branchName} and the following files that changed: ${filesChanged}`;
+    console.log(prompt);
+
     try {
-      const response = await this.openai.createCompletion({
-        model: "text-davinci-003",
+      const { data } = await this.openai.createCompletion({
+        model: 'text-davinci-003',
         prompt,
         temperature: 0.7,
         max_tokens: 256,
@@ -20,9 +22,9 @@ export class GptClient{
         frequency_penalty: 0.2,
         presence_penalty: 0,
       });
-      return response.data.choices[0].text.split(/\r?\n/).filter((t: string) => t?.length);
-      // console.log();
-      
+      return (data || []).choices[0].text
+        .split(/\r?\n/)
+        .filter((t: string) => t?.length);
     } catch (error: any) {
       if (error.response) {
         console.log(error.response.status);
@@ -30,7 +32,7 @@ export class GptClient{
       } else {
         console.log(error.message);
       }
-        return [];
+      return [];
     }
   }
 }

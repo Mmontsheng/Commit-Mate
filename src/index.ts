@@ -9,30 +9,34 @@ const exec = async () => {
   const gtpClient = new GptClient(apiKey);
   const gitClient = new GitClient();
 
-  const { error, changes } = gitClient.getDiff();
-  if (error) {
-    console.log(error);
-  } else {
-    const choices = await gtpClient.getMessages(changes ?? '');
-    choices.push(CANCEL);
-    try {
-      const answer = await enquirer.prompt<{ message: string }>({
-        type: 'select',
-        name: 'message',
-        message: 'Pick a message',
-        choices,
-      });
-      const { message } = answer;
-      if (message === CANCEL) {
-        console.log('Operation cancelled');
-      } else {
-        const { error, response } = gitClient.commit(message);
-        console.log(response || error);
-      }
-    } catch (error) {
-      console.log(error);
-      
+  const { error: diffError, changes = '' } = gitClient.getDiff();
+  if (diffError) {
+    console.log(diffError);
+    return;
+  }
+  const { error: branchNameError, name = ''} = gitClient.getCurrentBranchName();
+  if (branchNameError) {
+    console.log(branchNameError);
+    return;
+  }
+  const choices = await gtpClient.getMessages(changes ?? '', name?? '');
+  choices.push(CANCEL);
+  try {
+    const answer = await enquirer.prompt<{ message: string }>({
+      type: 'select',
+      name: 'message',
+      message: 'Pick a message',
+      choices,
+    });
+    const { message } = answer;
+    if (message === CANCEL) {
+      console.log('Operation cancelled');
+    } else {
+      const { error, response } = gitClient.commit(message);
+      console.log(response || error);
     }
+  } catch (error) {
+    console.log(error);
   }
 };
 
