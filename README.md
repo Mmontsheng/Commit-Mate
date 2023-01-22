@@ -2,7 +2,7 @@
 What to save time and quickly create well-written and descriptive commit messages without needing to think of them on your own?, look no further.
 
 ### Disclaimer
-All this project does is talk to GPT-3 API using your api key. If you don't feel safe entering using your api key, audit the code to make sure.
+All this project does is talk to GPT-3 API using your api key. If you don't feel safe entering or using your api key, audit the code to make sure.
 
 ## Introduction
 Commit Mate is a `Node.js` based command line tool that uses GPT-3 to generate commit message for your git commits
