@@ -6,6 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p .",
+    "publish": "build && npm run publish",
     "start": "node ./build/index.js",
     "dev": "nodemon ./src/index.ts"
   },
@@ -20,6 +21,15 @@
   "bugs": {
     "url": "https://github.com/Mmontsheng/Commit-Mate/issues"
   },
+  "keywords": [
+    "git",
+    "terminal",
+    "commit",
+    "CLI",
+    "GPT-3",
+    "OpenAI",
+    "AI"
+  ],
   "homepage": "https://github.com/Mmontsheng/Commit-Mate#readme",
   "license": "MIT",
   "dependencies": {
