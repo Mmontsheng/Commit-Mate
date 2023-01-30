@@ -9,8 +9,7 @@ export class GptClient {
     this.openai = new OpenAIApi(configuration);
   }
   async getMessages(filesChanged: string, branchName: string) {
-    const prompt = `generate five git commit messages for branch ${branchName} and the following files that changed: ${filesChanged}`;
-    console.log(prompt);
+    const prompt = `generate five git commit messages using branch ${branchName} and the following files that changed: ${filesChanged}`;
 
     try {
       const { data } = await this.openai.createCompletion({
